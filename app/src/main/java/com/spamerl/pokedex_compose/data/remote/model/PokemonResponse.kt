@@ -8,26 +8,17 @@ data class PokemonResponse(
     val abilities: List<Ability>,
     @SerializedName("base_experience")
     val baseExperience: Int,
-    val forms: List<Form>,
     val height: Int,
-    @SerializedName("held_items")
-    val heldItems: List<Any>,
     val id: Int,
-    @SerializedName("is_default")
-    val isDefault: Boolean,
-    @SerializedName("location_area_encounters")
-    val locationAreaEncounters: String,
     val moves: List<Move>,
     val name: String,
     val order: Int,
-    @SerializedName("past_types")
-    val pastTypes: List<Any>,
     val species: Species,
     val sprites: Sprites,
     val stats: List<Stat>,
-    val types: List<Type>,
     val weight: Int
 ) {
+
     data class Ability(
         val ability: Ability,
         @SerializedName("is_hidden")
@@ -39,11 +30,6 @@ data class PokemonResponse(
             val url: String
         )
     }
-
-    data class Form(
-        val name: String,
-        val url: String
-    )
 
     data class Move(
         val move: Move,
@@ -81,10 +67,8 @@ data class PokemonResponse(
     )
 
     data class Sprites(
-        @SerializedName("back_default")
-        val backDefault: String,
         @SerializedName("front_default")
-        val frontDefault: String
+        val frontDefault: String,
     )
 
     data class Stat(
@@ -98,27 +82,12 @@ data class PokemonResponse(
             val url: String
         )
     }
-
-    data class Type(
-        val slot: Int,
-        val type: Type
-    ) {
-        data class Type(
-            val name: String,
-            val url: String
-        )
-    }
 }
 
-fun PokemonResponse.toPokemonModel() = PokemonModel (
-    id = id,
+fun PokemonResponse.toPokemonUIModel() = PokemonModel(
     name = name,
-    baseExperience = baseExperience,
-    species = species,
-    sprite = sprites.frontDefault,
-    height = height,
-    weight = weight,
-    locationAreaEncountersURL = locationAreaEncounters,
+    id = id,
+    image = sprites.frontDefault,
     hp = stats[0].baseStat,
     attack = stats[1].baseStat,
     defense = stats[2].baseStat,

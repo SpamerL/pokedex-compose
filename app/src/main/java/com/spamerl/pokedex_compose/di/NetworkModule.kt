@@ -8,7 +8,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.*
+import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -19,9 +19,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private const val BASE_URL = "https://pokeapi.co/"
+
     @Provides
     @Singleton
-    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient =
+    fun providesOkHttpClient(@ApplicationContext context: Context): OkHttpClient =
         OkHttpClient.Builder()
             .apply {
                 if (!BuildConfig.DEBUG) return@apply
@@ -30,31 +32,21 @@ object NetworkModule {
                         .apply { level = HttpLoggingInterceptor.Level.BODY }
                 )
             }
-            .cache(Cache(context.cacheDir, 5L * 1024 * 1024))
-            .addInterceptor { forceCache(it) }
+            .addInterceptor(HttpLoggingInterceptor  { message -> Timber.i(message) }.apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
 
-    private fun forceCache(it: Interceptor.Chain, day: Int = 7): Response {
-        val request = it.request().newBuilder().header(
-            "Cache-Control",
-            "max-stale=" + 60 * 60 * 24 * day
-        ).build()
-        val response = it.proceed(request)
-        Timber.d("provideOkHttpClient: response: $response")
-        Timber.i("provideOkHttpClient: cacheControl: ${response.cacheControl}")
-        Timber.i("provideOkHttpClient: networkResponse: ${response.networkResponse}")
-        return response
+    @Provides
+    @Singleton
+    fun provideRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder {
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
     }
 
     @Provides
     @Singleton
-    fun provideRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder =
-        Retrofit.Builder()
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-
-    @Provides
-    @Singleton
-    fun provideApi(retrofit: Retrofit.Builder): PokeApi =
-        retrofit.baseUrl(PokeApi.BASE_URL).build().create(PokeApi::class.java)
+    fun providePokeApi(retrofit: Retrofit.Builder): PokeApi =
+        retrofit.baseUrl(BASE_URL).build().create(PokeApi::class.java)
 }

@@ -3,23 +3,22 @@ package com.spamerl.pokedex_compose.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.CompositionLocalProvider
 import com.spamerl.pokedex_compose.ui.theme.Pokedex_composeTheme
+import com.spamerl.pokedex_compose.util.LocalBackDispatcher
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Pokedex_composeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+            App {
+                CompositionLocalProvider(LocalBackDispatcher.provides(onBackPressedDispatcher)) {
+                    NavGraph()
                 }
             }
         }
@@ -27,14 +26,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
+fun App(content: @Composable () -> Unit) {
     Pokedex_composeTheme {
-        Greeting("Android")
+        content()
     }
 }

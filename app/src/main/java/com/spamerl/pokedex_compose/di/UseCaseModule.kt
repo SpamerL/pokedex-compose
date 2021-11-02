@@ -1,9 +1,8 @@
 package com.spamerl.pokedex_compose.di
 
-import com.spamerl.pokedex_compose.domain.repository.Repository
 import com.spamerl.pokedex_compose.domain.usecase.GetPokemonByIdUseCase
 import com.spamerl.pokedex_compose.domain.usecase.GetPokemonListUseCase
-import com.spamerl.pokedex_compose.domain.usecase.GetPokemonSpecieByNameUseCase
+import com.spamerl.pokedex_compose.domain.repository.Repository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,8 +20,4 @@ object UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideGetPokemonByIdUseCase(repo: Repository) = GetPokemonByIdUseCase(repo)
-
-    @Provides
-    @ViewModelScoped
-    fun provideGetPokemonSpecieByName(repo: Repository) = GetPokemonSpecieByNameUseCase(repo)
 }

@@ -1,8 +1,8 @@
 package com.spamerl.pokedex_compose.di
 
 import com.spamerl.pokedex_compose.data.remote.api.PokeApi
-import com.spamerl.pokedex_compose.data.repository.RepositoryImpl
 import com.spamerl.pokedex_compose.domain.repository.Repository
+import com.spamerl.pokedex_compose.data.repository.RepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +15,6 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providesRepository(api: PokeApi): Repository = RepositoryImpl(api = api)
+    fun provideRepository(api: PokeApi): Repository =
+        RepositoryImpl(api)
 }
