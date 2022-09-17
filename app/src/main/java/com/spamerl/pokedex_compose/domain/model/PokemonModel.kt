@@ -1,7 +1,7 @@
 package com.spamerl.pokedex_compose.domain.model
 
 data class PokemonModel(
-    val name:String = "",
+    val name: String = "",
     val id: Int = 0,
     val image: String = "",
     val hp: Int = 0,

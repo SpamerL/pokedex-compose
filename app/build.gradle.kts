@@ -1,67 +1,76 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
-    signingConfigs {
-        release {
-        }
-    }
-    compileSdk 31
+
+    compileSdk = 31
 
     defaultConfig {
-        applicationId "com.spamerl.pokedex_compose"
-        minSdk 21
-        targetSdk 31
-        versionCode 1
-        versionName "1.0"
-        multiDexEnabled true
+        applicationId = "com.spamerl.pokedex_compose"
+        minSdk = 21
+        targetSdk = 31
+        versionCode = 1
+        versionName = "1.0"
+        multiDexEnabled = true
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
-        useIR = true
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     buildFeatures {
-        compose true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.31'
+        kotlinCompilerExtensionVersion = libs.versions.composeVers.get()
     }
     packagingOptions {
         resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
     kapt {
-        correctErrorTypes true
+        correctErrorTypes = true
     }
-    compileSdkVersion 31
-    buildToolsVersion '30.0.3'
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiller)
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation(libs.lifecycle.runtimeKtx)
+    implementation(libs.lifecycle.viewModel)
+    implementation(libs.compose.activity)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.uiToolingPreview)
+    implementation(libs.compose.material)
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.navigationHilt)
+}
+
+/*
+implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
@@ -134,4 +143,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-}
+ */

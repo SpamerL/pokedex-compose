@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.7">
+      <module name="pokedex_compose.app" target="11" />
+      <module name="pokedex_compose.core-data" target="11" />
+      <module name="pokedex_compose.core-database" target="11" />
+      <module name="pokedex_compose.core-network" target="11" />
+      <module name="versionCatalog" target="11" />
+      <module name="versionCatalog.main" target="11" />
+      <module name="versionCatalog.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
